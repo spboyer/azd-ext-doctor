@@ -18,8 +18,8 @@ func NewCheckCommand() *cobra.Command {
 	var authTimeout time.Duration
 
 	checkCmd := &cobra.Command{
-		Use:     "check",
-		Short:   "Run the doctor checks",
+		Use:   "check",
+		Short: "Run the doctor checks",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			printRunning("Doctor Checks", "Starting...")
 

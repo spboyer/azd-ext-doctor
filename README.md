@@ -2,6 +2,36 @@
 
 An `azd` extension that checks for necessary prerequisites based on the current project's configuration.
 
+## Screenshot
+
+![Example output for `azd doctor check`](docs/images/doctor-check.svg)
+
+## Installation
+
+### Install (Published Extension)
+
+Once this extension is published to an `azd` extension source registry, you can install it with:
+
+```bash
+azd extension install spboyer.azd.doctor
+```
+
+### Install (Local Development)
+
+Recommended workflow is to use the `azd` developer extension (`azd x`):
+
+```bash
+# If needed, add the dev extension source (one-time)
+azd extension source add -n dev -t url -l "https://aka.ms/azd/extensions/registry/dev"
+
+# Install the developer extension (one-time)
+azd extension install microsoft.azd.extensions
+
+# From this repo
+cd spboyer.azd.doctor
+azd x build
+```
+
 ## Features
 
 Checks for the presence and version of the following tools:
@@ -26,11 +56,17 @@ Runs all the prerequisite checks.
 ```bash
 azd doctor check
 ```
-If you want to avoid any delay from the auth status check:
 
-```bash
-azd doctor check --skip-auth
-```
+Flags:
+
+- Skip auth check (avoids any auth-related delay):
+  ```bash
+  azd doctor check --skip-auth
+  ```
+- Limit auth check time (default is `5s`):
+  ```bash
+  azd doctor check --auth-timeout 2s
+  ```
 
 ### `context`
 
@@ -44,7 +80,7 @@ azd doctor context
 
 ### Prerequisites
 
-- Go 1.21+
+- Go 1.24+
 - Azure Developer CLI (`azd`)
 
 ### Build
@@ -56,20 +92,10 @@ go build -o ../bin/azd-ext-doctor .
 
 ### Install (Local Development)
 
-To develop and test this extension, it is recommended to use the `azd` developer extension tools (`azd x`).
+For local development, use:
 
-1. Initialize the extension (if not already done):
-   ```bash
-   azd x init
-   ```
-
-2. Build and install locally:
-   ```bash
-   azd x build
-   ```
-
-3. Watch for changes:
-   ```bash
-   azd x watch
-   ```
+```bash
+cd spboyer.azd.doctor
+azd x watch
+```
 

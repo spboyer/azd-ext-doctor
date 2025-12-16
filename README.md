@@ -4,7 +4,7 @@ An `azd` extension that checks for necessary prerequisites based on the current 
 
 ## Screenshot
 
-![Example output for `azd doctor check`](docs/images/doctor-check.svg)
+![Example output for `azd doctor check`](docs/images/doctor-check.png)
 
 ## Installation
 

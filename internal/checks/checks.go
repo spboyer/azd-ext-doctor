@@ -1,6 +1,7 @@
 package checks
 
 import (
+	"context"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -12,17 +13,48 @@ type Runner interface {
 	Run(name string, args ...string) error
 }
 
+// RunnerWithContext is an optional extension to Runner that allows command execution
+// to respect cancellation and timeouts.
+type RunnerWithContext interface {
+	OutputContext(ctx context.Context, name string, args ...string) ([]byte, error)
+	RunContext(ctx context.Context, name string, args ...string) error
+}
+
 type RealRunner struct{}
 
 func (r *RealRunner) Output(name string, args ...string) ([]byte, error) {
 	return exec.Command(name, args...).Output()
 }
 
+func (r *RealRunner) OutputContext(ctx context.Context, name string, args ...string) ([]byte, error) {
+	return exec.CommandContext(ctx, name, args...).Output()
+}
+
 func (r *RealRunner) Run(name string, args ...string) error {
 	return exec.Command(name, args...).Run()
 }
 
+func (r *RealRunner) RunContext(ctx context.Context, name string, args ...string) error {
+	return exec.CommandContext(ctx, name, args...).Run()
+}
+
 var CommandRunner Runner = &RealRunner{}
+
+func runnerOutput(ctx context.Context, name string, args ...string) ([]byte, error) {
+	if r, ok := CommandRunner.(RunnerWithContext); ok {
+		return r.OutputContext(ctx, name, args...)
+	}
+
+	return CommandRunner.Output(name, args...)
+}
+
+func runnerRun(ctx context.Context, name string, args ...string) error {
+	if r, ok := CommandRunner.(RunnerWithContext); ok {
+		return r.RunContext(ctx, name, args...)
+	}
+
+	return CommandRunner.Run(name, args...)
+}
 
 type CheckResult struct {
 	Name      string

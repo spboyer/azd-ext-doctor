@@ -26,6 +26,11 @@ Runs all the prerequisite checks.
 ```bash
 azd doctor check
 ```
+If you want to avoid any delay from the auth status check:
+
+```bash
+azd doctor check --skip-auth
+```
 
 ### `context`
 

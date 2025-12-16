@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/azure/azure-dev/cli/azd/pkg/azdext"
 	"github.com/fatih/color"
@@ -13,13 +14,61 @@ import (
 )
 
 func NewCheckCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:   "check",
-		Short: "Run the doctor checks",
+	var skipAuth bool
+	var authTimeout time.Duration
+
+	checkCmd := &cobra.Command{
+		Use:     "check",
+		Short:   "Run the doctor checks",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			printRunning("Doctor Checks", "Starting...")
 
-			// Initialize azd client
+			// 1) Determine Project File
+			projectFile := "azure.yaml"
+			if _, err := os.Stat(projectFile); os.IsNotExist(err) {
+				projectFile = "azure.yml"
+				if _, err := os.Stat(projectFile); os.IsNotExist(err) {
+					fmt.Println()
+					printRunning("AZD Checks", "Checking tools")
+					printResult(checks.CheckAzdVersion())
+					printResult(checks.CheckGit())
+					printResult(checks.CheckGh())
+
+					fmt.Println()
+					printRunning("Project Checks", "Checking azd project")
+					printInfo("Project File", "Not found (azure.yaml/azure.yml)")
+					printInfo("Project Name", "Unknown")
+
+					fmt.Println()
+					printRunning("Generic Checks", "Checking common dependencies")
+					printResult(checks.CheckDocker())
+					printResult(checks.CheckNode())
+					printResult(checks.CheckPython())
+					printResult(checks.CheckDotNet())
+					printResult(checks.CheckBash())
+					printResult(checks.CheckPwsh())
+					printResult(checks.CheckAzureFunctionsCoreTools())
+
+					fmt.Println()
+					if skipAuth {
+						printInfo("Azd Auth", "Skipped")
+						return nil
+					}
+					printRunning("Azd Auth", "Checking login status")
+					authCtx, cancel := context.WithTimeout(cmd.Context(), authTimeout)
+					defer cancel()
+					printResult(checks.CheckAzdLogin(authCtx, nil))
+					return nil
+				}
+			}
+
+			// 2) Load Project
+			config, err := checks.LoadProjectConfig(projectFile)
+			if err != nil {
+				return fmt.Errorf("failed to load project config: %w", err)
+			}
+
+			// Initialize azd client only when we have a project file.
 			ctx := azdext.WithAccessToken(cmd.Context())
 			azdClient, err := azdext.NewAzdClient()
 			if err != nil {
@@ -27,44 +76,33 @@ func NewCheckCommand() *cobra.Command {
 			}
 			defer azdClient.Close()
 
-			// 1. Determine Project File
-			projectFile := "azure.yaml"
-			if _, err := os.Stat(projectFile); os.IsNotExist(err) {
-				projectFile = "azure.yml"
-				if _, err := os.Stat(projectFile); os.IsNotExist(err) {
-					printInfo("Project File", "Not found")
-					printRunning("Generic Checks", "Running...")
-					runGenericChecks(ctx, azdClient)
-					return nil
-				}
-			}
-
-			// 2. Load Project
-			printSuccess("Project File", projectFile)
-			config, err := checks.LoadProjectConfig(projectFile)
-			if err != nil {
-				return fmt.Errorf("failed to load project config: %w", err)
-			}
-
-			printInfo("Project Name", config.Name)
-
-			// AZD Checks
+			// 3) AZD / Tool Checks
 			fmt.Println()
-			printRunning("AZD Checks", "Checking azd environment")
+			printRunning("AZD Checks", "Checking tools")
 			printResult(checks.CheckAzdVersion())
-			printResult(checks.CheckAzdLogin(ctx, azdClient))
-			printResult(checks.CheckAzdInit(ctx, azdClient))
 			printResult(checks.CheckGit())
 			printResult(checks.CheckGh())
 
-			// 3. Check Hooks (Root)
+			// 4) Project Checks
+			fmt.Println()
+			printRunning("Project Checks", "Checking azd project")
+			printSuccess("Project File", projectFile)
+			printInfo("Project Name", config.Name)
+			printResult(checks.CheckAzdInit(ctx, azdClient))
+
+			// 5) Project Hooks
 			if len(config.Hooks) > 0 {
 				fmt.Println()
 				printRunning("Project Hooks", "Checking requirements")
 				checkHooks(config.Hooks)
 			}
 
-			// 4. Check Services
+			// 6) Services
+			if len(config.Services) > 0 {
+				fmt.Println()
+				printRunning("Services", "Checking requirements")
+			}
+
 			checkedLangs := make(map[string]bool)
 			checkedTools := make(map[string]bool)
 
@@ -82,7 +120,7 @@ func NewCheckCommand() *cobra.Command {
 					case "csharp", "fsharp", "dotnet":
 						printResult(checks.CheckDotNet())
 					default:
-						// fmt.Printf("  [?] Unknown language requirement for: %s\n", svc.Language)
+						// Unknown language - no checks.
 					}
 					checkedLangs[svc.Language] = true
 				}
@@ -93,13 +131,8 @@ func NewCheckCommand() *cobra.Command {
 				}
 
 				// Check Container Requirements
-				// If host is container-based AND not a remote build (implied by lack of 'remote' flag or presence of 'image' without build)
-				// Logic:
-				// - If Host is containerapp or aks
-				// - AND Docker.Remote is false
-				// - AND Image is empty (implies we are building from source)
 				isContainerHost := svc.Host == "containerapp" || svc.Host == "aks"
-				needsBuild := svc.Image == "" // If image is provided, we assume pre-built
+				needsBuild := svc.Image == "" // If image is provided, assume pre-built.
 
 				if isContainerHost && !svc.Docker.Remote && needsBuild {
 					if !checkedTools["docker"] {
@@ -117,9 +150,25 @@ func NewCheckCommand() *cobra.Command {
 				}
 			}
 
+			// 7) Azd Auth (separate + optional + timeout)
+			fmt.Println()
+			if skipAuth {
+				printInfo("Azd Auth", "Skipped")
+				return nil
+			}
+			printRunning("Azd Auth", "Checking login status")
+			authCtx, cancel := context.WithTimeout(cmd.Context(), authTimeout)
+			defer cancel()
+			printResult(checks.CheckAzdLogin(authCtx, azdClient))
+
 			return nil
 		},
 	}
+
+	checkCmd.Flags().BoolVar(&skipAuth, "skip-auth", false, "Skip azd auth status check")
+	checkCmd.Flags().DurationVar(&authTimeout, "auth-timeout", 5*time.Second, "Timeout for azd auth status check")
+
+	return checkCmd
 }
 
 func runGenericChecks(ctx context.Context, azdClient checks.IAzdClient) {

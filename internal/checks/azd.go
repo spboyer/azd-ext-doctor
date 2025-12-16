@@ -2,6 +2,7 @@ package checks
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -33,10 +34,18 @@ func CheckAzdVersion() CheckResult {
 
 func CheckAzdLogin(ctx context.Context, client IAzdClient) CheckResult {
 	// Check login status using CLI command
-	out, err := CommandRunner.Output("azd", "auth", "login", "--check-status")
+	out, err := runnerOutput(ctx, "azd", "auth", "login", "--check-status")
 	outputStr := strings.TrimSpace(string(out))
 
 	if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) {
+			msg := "Timed out"
+			if errors.Is(err, context.Canceled) {
+				msg = "Canceled"
+			}
+			return CheckResult{Name: "azd auth", Installed: true, Version: msg, Running: false, Error: err}
+		}
+
 		msg := "Not logged in"
 		if len(outputStr) > 0 {
 			msg = outputStr

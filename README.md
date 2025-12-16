@@ -8,11 +8,16 @@ An `azd` extension that checks for necessary prerequisites based on the current 
 
 ## Installation
 
-### Install (Published Extension)
-
-Once this extension is published to an `azd` extension source registry, you can install it with:
+### Enable Extensions & Install azd-doctor
 
 ```bash
+# Enable extensions
+azd config set alpha.extensions.enabled on
+
+# Add azd-doctor extension source
+azd extension source add -n doctor -t url -l https://raw.githubusercontent.com/spboyer/azd-ext-doctor/main/registry.json
+
+# Install the extension
 azd extension install spboyer.azd.doctor
 ```
 
@@ -28,7 +33,6 @@ azd extension source add -n dev -t url -l "https://aka.ms/azd/extensions/registr
 azd extension install microsoft.azd.extensions
 
 # From this repo
-cd spboyer.azd.doctor
 azd x build
 ```
 
@@ -86,8 +90,7 @@ azd doctor context
 ### Build
 
 ```bash
-cd spboyer.azd.doctor
-go build -o ../bin/azd-ext-doctor .
+go build -o azd-ext-doctor .
 ```
 
 ### Install (Local Development)
@@ -95,7 +98,6 @@ go build -o ../bin/azd-ext-doctor .
 For local development, use:
 
 ```bash
-cd spboyer.azd.doctor
 azd x watch
 ```
 

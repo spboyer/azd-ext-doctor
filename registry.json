@@ -1,0 +1,87 @@
+{
+  "extensions": [
+    {
+      "id": "spboyer.azd.doctor",
+      "namespace": "doctor",
+      "displayName": "azd doctor",
+      "description": "Checks for pre-reqs and template requirements as needed.",
+      "versions": [
+        {
+          "version": "0.0.1",
+          "capabilities": [
+            "custom-commands"
+          ],
+          "usage": "azd doctor <command> [options]",
+          "examples": [
+            {
+              "name": "check",
+              "description": "Checks all prerequisites.",
+              "usage": "azd doctor check"
+            },
+            {
+              "name": "context",
+              "description": "Get the context of the AZD project & environment.",
+              "usage": "azd doctor context"
+            }
+          ],
+          "artifacts": {
+            "darwin/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "PLACEHOLDER_CHECKSUM"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-darwin-amd64.zip"
+            },
+            "darwin/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "PLACEHOLDER_CHECKSUM"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-darwin-arm64.zip"
+            },
+            "linux/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "PLACEHOLDER_CHECKSUM"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-linux-amd64.tar.gz"
+            },
+            "linux/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "PLACEHOLDER_CHECKSUM"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-linux-arm64.tar.gz"
+            },
+            "windows/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "PLACEHOLDER_CHECKSUM"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-windows-amd64.zip"
+            },
+            "windows/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "PLACEHOLDER_CHECKSUM"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-windows-arm64.zip"
+            }
+          }
+        }
+      ],
+      "tags": [
+        "developer",
+        "productivity",
+        "doctor",
+        "prerequisites"
+      ]
+    }
+  ]
+}

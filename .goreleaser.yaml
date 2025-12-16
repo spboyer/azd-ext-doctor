@@ -1,0 +1,32 @@
+version: 2
+project_name: azd-ext-doctor
+builds:
+  - binary: azd-ext-doctor
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
+    wrap_in_directory: false
+    format_overrides:
+      - goos: windows
+        format: zip
+      - goos: darwin
+        format: zip
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'

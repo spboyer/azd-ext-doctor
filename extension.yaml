@@ -11,3 +11,6 @@ examples:
   - name: check
     description: Checks all prerequisites.
     usage: azd doctor check
+  - name: context
+    description: Get the context of the AZD project & environment.
+    usage: azd doctor context

@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"runtime"
 
+	"github.com/azure/azure-dev/cli/azd/pkg/azdext"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"spboyer.azd.doctor/internal/checks"
@@ -17,6 +19,14 @@ func NewCheckCommand() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			printRunning("Doctor Checks", "Starting...")
 
+			// Initialize azd client
+			ctx := azdext.WithAccessToken(cmd.Context())
+			azdClient, err := azdext.NewAzdClient()
+			if err != nil {
+				return fmt.Errorf("failed to create azd client: %w", err)
+			}
+			defer azdClient.Close()
+
 			// 1. Determine Project File
 			projectFile := "azure.yaml"
 			if _, err := os.Stat(projectFile); os.IsNotExist(err) {
@@ -24,7 +34,7 @@ func NewCheckCommand() *cobra.Command {
 				if _, err := os.Stat(projectFile); os.IsNotExist(err) {
 					printInfo("Project File", "Not found")
 					printRunning("Generic Checks", "Running...")
-					runGenericChecks()
+					runGenericChecks(ctx, azdClient)
 					return nil
 				}
 			}
@@ -37,6 +47,15 @@ func NewCheckCommand() *cobra.Command {
 			}
 
 			printInfo("Project Name", config.Name)
+
+			// AZD Checks
+			fmt.Println()
+			printRunning("AZD Checks", "Checking azd environment")
+			printResult(checks.CheckAzdVersion())
+			printResult(checks.CheckAzdLogin(ctx, azdClient))
+			printResult(checks.CheckAzdInit(ctx, azdClient))
+			printResult(checks.CheckGit())
+			printResult(checks.CheckGh())
 
 			// 3. Check Hooks (Root)
 			if len(config.Hooks) > 0 {
@@ -103,7 +122,11 @@ func NewCheckCommand() *cobra.Command {
 	}
 }
 
-func runGenericChecks() {
+func runGenericChecks(ctx context.Context, azdClient checks.IAzdClient) {
+	printResult(checks.CheckAzdVersion())
+	printResult(checks.CheckAzdLogin(ctx, azdClient))
+	printResult(checks.CheckGit())
+	printResult(checks.CheckGh())
 	printResult(checks.CheckDocker())
 	printResult(checks.CheckNode())
 	printResult(checks.CheckPython())

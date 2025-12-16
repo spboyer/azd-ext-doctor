@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+// Runner interface allows mocking of exec.Command
+type Runner interface {
+	Output(name string, args ...string) ([]byte, error)
+	Run(name string, args ...string) error
+}
+
+type RealRunner struct{}
+
+func (r *RealRunner) Output(name string, args ...string) ([]byte, error) {
+	return exec.Command(name, args...).Output()
+}
+
+func (r *RealRunner) Run(name string, args ...string) error {
+	return exec.Command(name, args...).Run()
+}
+
+var CommandRunner Runner = &RealRunner{}
+
 type CheckResult struct {
 	Name      string
 	Installed bool
@@ -16,8 +34,7 @@ type CheckResult struct {
 }
 
 func CheckTool(name string, args ...string) CheckResult {
-	cmd := exec.Command(name, args...)
-	out, err := cmd.Output()
+	out, err := CommandRunner.Output(name, args...)
 	if err != nil {
 		return CheckResult{Name: name, Installed: false, Error: err}
 	}
@@ -30,7 +47,7 @@ func CheckDocker() CheckResult {
 	if res.Installed {
 		res.HasDaemon = true
 		// Check if docker daemon is running
-		if err := exec.Command("docker", "info").Run(); err != nil {
+		if err := CommandRunner.Run("docker", "info"); err != nil {
 			res.Running = false
 			res.Error = fmt.Errorf("daemon not running")
 		}
@@ -42,7 +59,7 @@ func CheckDocker() CheckResult {
 		res.Name = "podman" // Update name to reflect what was found
 		res.HasDaemon = true
 		// Check if podman is working (podman info)
-		if err := exec.Command("podman", "info").Run(); err != nil {
+		if err := CommandRunner.Run("podman", "info"); err != nil {
 			res.Running = false
 			res.Error = fmt.Errorf("daemon not running")
 		}
@@ -81,4 +98,12 @@ func CheckPwsh() CheckResult {
 
 func CheckAzureFunctionsCoreTools() CheckResult {
 	return CheckTool("func", "--version")
+}
+
+func CheckGit() CheckResult {
+	return CheckTool("git", "--version")
+}
+
+func CheckGh() CheckResult {
+	return CheckTool("gh", "--version")
 }

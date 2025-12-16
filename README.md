@@ -45,7 +45,8 @@ azd doctor context
 ### Build
 
 ```bash
-go build -o azd-ext-doctor .
+cd spboyer.azd.doctor
+go build -o ../bin/azd-ext-doctor .
 ```
 
 ### Install (Local Development)

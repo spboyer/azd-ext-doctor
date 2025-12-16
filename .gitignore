@@ -11,8 +11,15 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Coverage profiles (common)
+coverage.out
+*.coverprofile
+
+# Logs
+*.log
+
+# Dependency directories
+vendor/
 
 # Go workspace file
 go.work
@@ -23,6 +30,37 @@ go.work
 # OS Specific
 .DS_Store
 Thumbs.db
+
+# IDEs
+.idea/
+*.iml
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Local env/config
+.env
+.env.*
+!.env.example
+
+# Azure Developer CLI state
+.azure/
+.azd/
+
+# Common build output dirs
+dist/
+out/
+build/
+release/
+tmp/
+.tmp/
+
+# Archives
+*.zip
+*.tar.gz
+*.tgz
 
 # Project specific binaries
 azd-ext-doctor

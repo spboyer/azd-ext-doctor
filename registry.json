@@ -28,7 +28,7 @@
             "darwin/amd64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": "PLACEHOLDER_CHECKSUM"
+                "value": "dd20ab4a12510b8b46d2d41b5b514e15eb582b78f27e53d1e910fb07499effda"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-darwin-amd64.zip"
@@ -36,7 +36,7 @@
             "darwin/arm64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": "PLACEHOLDER_CHECKSUM"
+                "value": "fe26a1d1945233056e59dec9ca4b47a84bcd098b458b6d414b1012f88d304200"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-darwin-arm64.zip"
@@ -44,7 +44,7 @@
             "linux/amd64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": "PLACEHOLDER_CHECKSUM"
+                "value": "cde547f0369b7f07e1a258de037268facc72686d590dbbd8fad3497c8c9e01d7"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-linux-amd64.tar.gz"
@@ -52,7 +52,7 @@
             "linux/arm64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": "PLACEHOLDER_CHECKSUM"
+                "value": "637940825ada678f5ebe43250b3a7f1a2852648a07fa4bc0e85e6cf8c0846695"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-linux-arm64.tar.gz"
@@ -60,7 +60,7 @@
             "windows/amd64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": "PLACEHOLDER_CHECKSUM"
+                "value": "73e800ca2dac13dfafec117b06e038897649d254b578c4e5afc022a0dd7dff46"
               },
               "entryPoint": "azd-ext-doctor.exe",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-windows-amd64.zip"
@@ -68,7 +68,7 @@
             "windows/arm64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": "PLACEHOLDER_CHECKSUM"
+                "value": "aa674b7e158bc11066d4fa4c582e6798b5ec7c8bdcaba4aac46e7b43729fef0b"
               },
               "entryPoint": "azd-ext-doctor.exe",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.1/azd-ext-doctor-windows-arm64.zip"

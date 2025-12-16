@@ -1,7 +1,8 @@
-version: 2
 project_name: azd-ext-doctor
 builds:
-  - binary: azd-ext-doctor
+  - id: azd-ext-doctor
+    binary: azd-ext-doctor
+    main: .
     env:
       - CGO_ENABLED=0
     goos:

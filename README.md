@@ -4,8 +4,36 @@ An `azd` extension that checks for necessary prerequisites based on the current 
 
 ## Features
 
-- Checks for Container Runtime (Docker/Podman)
-- Checks for Language Runtimes based on `azure.yaml` (Node.js, Python, .NET)
+Checks for the presence and version of the following tools:
+
+- **Container Runtimes**: Docker or Podman (checks if daemon is running)
+- **Language Runtimes**:
+  - Node.js
+  - Python
+  - .NET SDK
+- **Shells**:
+  - Bash
+  - PowerShell (pwsh/powershell)
+- **Azure Tools**:
+  - Azure Functions Core Tools
+
+## Commands
+
+### `check`
+
+Runs all the prerequisite checks.
+
+```bash
+azd doctor check
+```
+
+### `context`
+
+Displays the context of the current AZD project and environment.
+
+```bash
+azd doctor context
+```
 
 ## Development
 
@@ -39,10 +67,3 @@ To develop and test this extension, it is recommended to use the `azd` developer
    azd x watch
    ```
 
-## Usage
-
-Once installed, you can run the doctor check:
-
-```bash
-azd doctor check
-```

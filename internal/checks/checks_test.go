@@ -325,25 +325,6 @@ func TestCheckSwaCli(t *testing.T) {
 	})
 }
 
-func TestCheckBicep(t *testing.T) {
-	origRunner := CommandRunner
-	defer func() { CommandRunner = origRunner }()
-
-	t.Run("Installed", func(t *testing.T) {
-		CommandRunner = &MockRunner{
-			OutputFunc: func(name string, args ...string) ([]byte, error) {
-				if name == "bicep" && args[0] == "--version" {
-					return []byte("Bicep CLI version 0.20.0\n"), nil
-				}
-				return nil, fmt.Errorf("unexpected command")
-			},
-		}
-		res := CheckBicep()
-		assert.True(t, res.Installed)
-		assert.Contains(t, res.Version, "0.20.0")
-	})
-}
-
 func TestCheckTerraform(t *testing.T) {
 	origRunner := CommandRunner
 	defer func() { CommandRunner = origRunner }()

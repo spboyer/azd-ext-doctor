@@ -110,9 +110,7 @@ func NewCheckCommand() *cobra.Command {
 			fmt.Println()
 			printRunning("Infra", "Checking requirements")
 			provider := config.Infra.Provider
-			if provider == "" || provider == "bicep" {
-				printResult(checks.CheckBicep())
-			} else if provider == "terraform" {
+			if provider == "terraform" {
 				printResult(checks.CheckTerraform())
 			}
 

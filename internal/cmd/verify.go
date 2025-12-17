@@ -153,11 +153,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 	if targetCommand == "provision" || targetCommand == "up" {
 		provider := config.Infra.Provider
 		// Default to bicep if empty
-		if provider == "" || provider == "bicep" {
-			if err := requireCheck(checks.CheckBicep()); err != nil {
-				return err
-			}
-		} else if provider == "terraform" {
+		if provider == "terraform" {
 			if err := requireCheck(checks.CheckTerraform()); err != nil {
 				return err
 			}

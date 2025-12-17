@@ -147,10 +147,6 @@ func CheckGh() CheckResult {
 	return CheckTool("gh", "--version")
 }
 
-func CheckBicep() CheckResult {
-	return CheckTool("bicep", "--version")
-}
-
 func CheckTerraform() CheckResult {
 	return CheckTool("terraform", "--version")
 }

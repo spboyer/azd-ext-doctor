@@ -52,6 +52,34 @@ hooks:
 		assert.Equal(t, "echo \"predeploy\"", config.Hooks["predeploy"].Run)
 	})
 
+	t.Run("Infra and RequiredVersions", func(t *testing.T) {
+		content := `
+name: test-infra
+infra:
+  provider: terraform
+requiredVersions:
+  azd: ">= 1.0.0"
+  extensions:
+    azure.ai.agents: ">= 0.1.0"
+`
+		tmpfile, err := os.CreateTemp("", "azure.yaml")
+		require.NoError(t, err)
+		defer os.Remove(tmpfile.Name())
+
+		_, err = tmpfile.Write([]byte(content))
+		require.NoError(t, err)
+		tmpfile.Close()
+
+		config, err := LoadProjectConfig(tmpfile.Name())
+		require.NoError(t, err)
+
+		assert.Equal(t, "test-infra", config.Name)
+		assert.Equal(t, "terraform", config.Infra.Provider)
+		assert.Equal(t, ">= 1.0.0", config.RequiredVersions.Azd)
+		assert.Contains(t, config.RequiredVersions.Extensions, "azure.ai.agents")
+		assert.Equal(t, ">= 0.1.0", config.RequiredVersions.Extensions["azure.ai.agents"])
+	})
+
 	t.Run("Invalid File", func(t *testing.T) {
 		_, err := LoadProjectConfig("nonexistent.yaml")
 		assert.Error(t, err)

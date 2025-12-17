@@ -50,6 +50,12 @@ Checks for the presence and version of the following tools:
   - PowerShell (pwsh/powershell)
 - **Azure Tools**:
   - Azure Functions Core Tools
+  - Azure Static Web Apps CLI (swa)
+  - Bicep
+- **Infrastructure as Code**:
+  - Terraform
+- **Extensions**:
+  - Validates required extension versions specified in `azure.yaml`
 
 ## Commands
 
@@ -72,6 +78,18 @@ Flags:
   azd doctor check --auth-timeout 2s
   ```
 
+### `verify`
+
+Verifies that the environment meets the requirements specified in `azure.yaml`. This command is designed to be used in CI/CD pipelines or as a pre-deployment check.
+
+It checks:
+- Required tools based on the project configuration (e.g., `swa` if using Static Web Apps, `terraform` if using Terraform).
+- Required extension versions specified in `requiredVersions.extensions`.
+
+```bash
+azd doctor verify
+```
+
 ### `context`
 
 Displays the context of the current AZD project and environment.
@@ -79,6 +97,13 @@ Displays the context of the current AZD project and environment.
 ```bash
 azd doctor context
 ```
+
+## Lifecycle Hooks
+
+The extension automatically registers a `predeploy` hook to run `azd doctor verify` before deployment. This ensures that the environment is correctly set up before attempting to deploy.
+
+To enable this, ensure the extension is installed and enabled in your project.
+
 
 ## Development
 

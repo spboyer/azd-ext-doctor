@@ -1,5 +1,9 @@
 # Release History
 
+## 0.0.3 - Terraform Focus
+
+- Removed Bicep checks and related tests, focusing exclusively on Terraform infrastructure checks.
+
 ## 0.0.2 - Bypass Verification
 
 - Added `AZD_DOCTOR_SKIP_VERIFY` environment variable to bypass verification checks.

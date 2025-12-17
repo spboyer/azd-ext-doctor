@@ -34,7 +34,7 @@
             "darwin/amd64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": ""
+                "value": "491047fb93fd8eab1c4afe72c33ed13b10f6d915ec601c116714a77c18cedd65"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.2/azd-ext-doctor-darwin-amd64.zip"
@@ -42,7 +42,7 @@
             "darwin/arm64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": ""
+                "value": "fee5a5ff2586eaf62fd3162bc1fd1a840a5ff07eb2fa722d375a1e1455f35bba"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.2/azd-ext-doctor-darwin-arm64.zip"
@@ -50,7 +50,7 @@
             "linux/amd64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": ""
+                "value": "088023cbf5296f60c2be14772a94da667c2464c14b3c96313aaf53f539ecb47f"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.2/azd-ext-doctor-linux-amd64.tar.gz"
@@ -58,7 +58,7 @@
             "linux/arm64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": ""
+                "value": "b0e9979a6badd517b07fccfaa88e7c81ec902c35bd53170e1a9b97e1332ce310"
               },
               "entryPoint": "azd-ext-doctor",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.2/azd-ext-doctor-linux-arm64.tar.gz"
@@ -66,7 +66,7 @@
             "windows/amd64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": ""
+                "value": "b8575bff409a615ebaf8088df3e64366b51ce7c57a0b3b08b6ca7bbce8be42bc"
               },
               "entryPoint": "azd-ext-doctor.exe",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.2/azd-ext-doctor-windows-amd64.zip"
@@ -74,7 +74,7 @@
             "windows/arm64": {
               "checksum": {
                 "algorithm": "sha256",
-                "value": ""
+                "value": "348e559ce0aa93b1355734db1c2c599c0ca23cf903b164205ee483e8d5082fb4"
               },
               "entryPoint": "azd-ext-doctor.exe",
               "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.2/azd-ext-doctor-windows-arm64.zip"

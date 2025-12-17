@@ -1,5 +1,6 @@
 capabilities:
     - custom-commands
+    - lifecycle-events
 description: Checks for pre-reqs and template requirements as needed.
 displayName: azd doctor
 id: spboyer.azd.doctor
@@ -14,3 +15,6 @@ examples:
   - name: context
     description: Get the context of the AZD project & environment.
     usage: azd doctor context
+  - name: verify
+    description: Verify environment requirements for a specific azd command (up, provision, deploy). Checks tools, auth, and project config.
+    usage: azd doctor verify --command <command>

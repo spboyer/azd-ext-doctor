@@ -8,9 +8,20 @@ import (
 )
 
 type AzureYaml struct {
-	Name     string             `yaml:"name"`
-	Services map[string]Service `yaml:"services"`
-	Hooks    Hooks              `yaml:"hooks"`
+	Name             string             `yaml:"name"`
+	Services         map[string]Service `yaml:"services"`
+	Hooks            Hooks              `yaml:"hooks"`
+	Infra            Infra              `yaml:"infra"`
+	RequiredVersions RequiredVersions   `yaml:"requiredVersions"`
+}
+
+type RequiredVersions struct {
+	Azd        string            `yaml:"azd"`
+	Extensions map[string]string `yaml:"extensions"`
+}
+
+type Infra struct {
+	Provider string `yaml:"provider"`
 }
 
 type Service struct {

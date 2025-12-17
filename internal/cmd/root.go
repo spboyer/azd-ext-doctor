@@ -23,6 +23,7 @@ func NewRootCommand() *cobra.Command {
 
 	rootCmd.AddCommand(newVersionCommand())
 	rootCmd.AddCommand(NewCheckCommand())
+	rootCmd.AddCommand(NewVerifyCommand())
 	rootCmd.AddCommand(newContextCommand())
 
 	return rootCmd

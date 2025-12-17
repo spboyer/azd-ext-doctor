@@ -97,7 +97,26 @@ func NewCheckCommand() *cobra.Command {
 				checkHooks(config.Hooks)
 			}
 
-			// 6) Services
+			// 6) Required Extensions
+			if len(config.RequiredVersions.Extensions) > 0 {
+				fmt.Println()
+				printRunning("Extensions", "Checking requirements")
+				for name, version := range config.RequiredVersions.Extensions {
+					printResult(checks.CheckExtension(name, version))
+				}
+			}
+
+			// 7) Infra Checks
+			fmt.Println()
+			printRunning("Infra", "Checking requirements")
+			provider := config.Infra.Provider
+			if provider == "" || provider == "bicep" {
+				printResult(checks.CheckBicep())
+			} else if provider == "terraform" {
+				printResult(checks.CheckTerraform())
+			}
+
+			// 8) Services
 			if len(config.Services) > 0 {
 				fmt.Println()
 				printRunning("Services", "Checking requirements")
@@ -148,9 +167,17 @@ func NewCheckCommand() *cobra.Command {
 						checkedTools["func"] = true
 					}
 				}
+
+				// Check Static Web Apps
+				if svc.Host == "staticwebapp" {
+					if !checkedTools["swa"] {
+						printResult(checks.CheckSwaCli())
+						checkedTools["swa"] = true
+					}
+				}
 			}
 
-			// 7) Azd Auth (separate + optional + timeout)
+			// 9) Azd Auth (separate + optional + timeout)
 			fmt.Println()
 			if skipAuth {
 				printInfo("Azd Auth", "Skipped")

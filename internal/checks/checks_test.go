@@ -66,15 +66,15 @@ func (m *MockDeploymentService) GetDeploymentContext(ctx context.Context, in *az
 
 // MockProjectService implements azdext.ProjectServiceClient
 type MockProjectService struct {
-	GetFunc              func(ctx context.Context, in *azdext.EmptyRequest, opts ...grpc.CallOption) (*azdext.GetProjectResponse, error)
-	AddServiceFunc       func(ctx context.Context, in *azdext.AddServiceRequest, opts ...grpc.CallOption) (*azdext.EmptyResponse, error)
-	GetConfigSectionFunc func(ctx context.Context, in *azdext.GetProjectConfigSectionRequest, opts ...grpc.CallOption) (*azdext.GetProjectConfigSectionResponse, error)
-	GetConfigValueFunc      func(ctx context.Context, in *azdext.GetProjectConfigValueRequest, opts ...grpc.CallOption) (*azdext.GetProjectConfigValueResponse, error)
-	GetResolvedServicesFunc   func(ctx context.Context, in *azdext.EmptyRequest, opts ...grpc.CallOption) (*azdext.GetResolvedServicesResponse, error)
+	GetFunc                     func(ctx context.Context, in *azdext.EmptyRequest, opts ...grpc.CallOption) (*azdext.GetProjectResponse, error)
+	AddServiceFunc              func(ctx context.Context, in *azdext.AddServiceRequest, opts ...grpc.CallOption) (*azdext.EmptyResponse, error)
+	GetConfigSectionFunc        func(ctx context.Context, in *azdext.GetProjectConfigSectionRequest, opts ...grpc.CallOption) (*azdext.GetProjectConfigSectionResponse, error)
+	GetConfigValueFunc          func(ctx context.Context, in *azdext.GetProjectConfigValueRequest, opts ...grpc.CallOption) (*azdext.GetProjectConfigValueResponse, error)
+	GetResolvedServicesFunc     func(ctx context.Context, in *azdext.EmptyRequest, opts ...grpc.CallOption) (*azdext.GetResolvedServicesResponse, error)
 	GetServiceConfigSectionFunc func(ctx context.Context, in *azdext.GetServiceConfigSectionRequest, opts ...grpc.CallOption) (*azdext.GetServiceConfigSectionResponse, error)
 	GetServiceConfigValueFunc   func(ctx context.Context, in *azdext.GetServiceConfigValueRequest, opts ...grpc.CallOption) (*azdext.GetServiceConfigValueResponse, error)
-	ParseGitHubUrlFunc   func(ctx context.Context, in *azdext.ParseGitHubUrlRequest, opts ...grpc.CallOption) (*azdext.ParseGitHubUrlResponse, error)
-	SetConfigSectionFunc func(ctx context.Context, in *azdext.SetProjectConfigSectionRequest, opts ...grpc.CallOption) (*azdext.EmptyResponse, error)
+	ParseGitHubUrlFunc          func(ctx context.Context, in *azdext.ParseGitHubUrlRequest, opts ...grpc.CallOption) (*azdext.ParseGitHubUrlResponse, error)
+	SetConfigSectionFunc        func(ctx context.Context, in *azdext.SetProjectConfigSectionRequest, opts ...grpc.CallOption) (*azdext.EmptyResponse, error)
 	SetConfigValueFunc          func(ctx context.Context, in *azdext.SetProjectConfigValueRequest, opts ...grpc.CallOption) (*azdext.EmptyResponse, error)
 	SetServiceConfigSectionFunc func(ctx context.Context, in *azdext.SetServiceConfigSectionRequest, opts ...grpc.CallOption) (*azdext.EmptyResponse, error)
 	SetServiceConfigValueFunc   func(ctx context.Context, in *azdext.SetServiceConfigValueRequest, opts ...grpc.CallOption) (*azdext.EmptyResponse, error)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/azure/azure-dev/cli/azd/pkg/azdext"
@@ -38,9 +39,46 @@ It is automatically invoked by azd before 'up', 'provision', and 'deploy' comman
 }
 
 func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Duration) error {
+	// Check for bypass environment variable
+	// AZD_DOCTOR_SKIP_VERIFY can be:
+	// - "true", "1", "all": Skip all verification
+	// - "up", "provision", "deploy": Skip verification for specific command
+	// - Comma separated list: "provision,deploy"
+	skipVerify := os.Getenv("AZD_DOCTOR_SKIP_VERIFY")
+	if skipVerify != "" {
+		// Check for global skip
+		if skipVerify == "true" || skipVerify == "1" || skipVerify == "all" {
+			printSuccess("Verification", "Skipped by AZD_DOCTOR_SKIP_VERIFY")
+			return nil
+		}
+	}
+
+	// Determine the actual command context if running as a hook
+	// azd sets AZD_HOOK_NAME to the name of the hook (e.g. predeploy, preprovision)
+	hookName := os.Getenv("AZD_HOOK_NAME")
+	if hookName != "" {
+		switch hookName {
+		case "predeploy":
+			targetCommand = "deploy"
+		case "preprovision":
+			targetCommand = "provision"
+		case "preup":
+			targetCommand = "up"
+		}
+	}
+
 	// Default to 'up' if not specified, or validate input
 	if targetCommand == "" {
 		targetCommand = "up"
+	}
+
+	// Check if specific command should be skipped
+	if skipVerify != "" {
+		// Simple contains check for now, could be more robust with splitting
+		if contains(skipVerify, targetCommand) {
+			printSuccess("Verification", fmt.Sprintf("Skipped for %s by AZD_DOCTOR_SKIP_VERIFY", targetCommand))
+			return nil
+		}
 	}
 
 	if targetCommand != "up" && targetCommand != "provision" && targetCommand != "deploy" {
@@ -207,4 +245,14 @@ func requireCheck(res checks.CheckResult) error {
 	}
 	printSuccess(res.Name, res.Version)
 	return nil
+}
+
+func contains(s, substr string) bool {
+	parts := strings.Split(s, ",")
+	for _, p := range parts {
+		if strings.TrimSpace(p) == substr {
+			return true
+		}
+	}
+	return false
 }

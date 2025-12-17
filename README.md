@@ -104,6 +104,28 @@ The extension automatically registers a `predeploy` hook to run `azd doctor veri
 
 To enable this, ensure the extension is installed and enabled in your project.
 
+### Bypassing Verification
+
+You can bypass the verification check by setting the `AZD_DOCTOR_SKIP_VERIFY` environment variable.
+
+- **Skip all checks**:
+  ```bash
+  export AZD_DOCTOR_SKIP_VERIFY=true
+  # or
+  export AZD_DOCTOR_SKIP_VERIFY=all
+  ```
+
+- **Skip for specific commands**:
+  ```bash
+  # Skip only for deploy
+  export AZD_DOCTOR_SKIP_VERIFY=deploy
+
+  # Skip for provision and deploy
+  export AZD_DOCTOR_SKIP_VERIFY=provision,deploy
+  ```
+
+Supported values for specific commands are `up`, `provision`, and `deploy`.
+
 
 ## Development
 

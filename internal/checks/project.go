@@ -34,7 +34,7 @@ type Service struct {
 }
 
 type DockerConfig struct {
-	Remote bool `yaml:"remote"`
+	Remote bool `yaml:"remoteBuild"`
 }
 
 type Hooks map[string]HookConfig

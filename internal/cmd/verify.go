@@ -166,7 +166,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 		checkedLangs := make(map[string]bool)
 		checkedTools := make(map[string]bool)
 
-		for _, svc := range config.Services {
+		for svcName, svc := range config.Services {
 			// Language Checks
 			if svc.Language != "" && !checkedLangs[svc.Language] {
 				var res checks.CheckResult
@@ -194,7 +194,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 			if isContainerHost && !svc.Docker.Remote && needsBuild {
 				if !checkedTools["docker"] {
 					if err := requireCheck(checks.CheckDocker()); err != nil {
-						return err
+						return fmt.Errorf("%w\n\nTip: You can enable remote build in azure.yaml to build without local Docker:\n  services:\n    %s:\n      docker:\n        remoteBuild: true\n\nOr run:\n  azd doctor configure remote-build", err, svcName)
 					}
 					checkedTools["docker"] = true
 				}

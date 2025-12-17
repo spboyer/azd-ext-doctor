@@ -1,5 +1,11 @@
 # Release History
 
+## 0.0.4 - Remote Build Configuration
+
+- Added `configure remote-build` command to easily enable remote builds for container apps.
+- Updated `verify` command to suggest enabling remote build when Docker is missing.
+- Fixed `azure.yaml` parsing to correctly map `remoteBuild` field.
+
 ## 0.0.3 - Terraform Focus
 
 - Removed Bicep checks and related tests, focusing exclusively on Terraform infrastructure checks.

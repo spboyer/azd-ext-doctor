@@ -85,9 +85,22 @@ Verifies that the environment meets the requirements specified in `azure.yaml`. 
 It checks:
 - Required tools based on the project configuration (e.g., `swa` if using Static Web Apps, `terraform` if using Terraform).
 - Required extension versions specified in `requiredVersions.extensions`.
+- Suggests enabling `remoteBuild` if Docker is missing for container apps.
 
 ```bash
 azd doctor verify
+```
+
+### `configure`
+
+Helps configure project settings in `azure.yaml`.
+
+#### `remote-build`
+
+Enables remote build (`docker.remoteBuild: true`) for all services using `containerapp` or `aks` host. This is useful when local Docker is not available.
+
+```bash
+azd doctor configure remote-build
 ```
 
 ### `context`

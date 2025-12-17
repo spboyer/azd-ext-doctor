@@ -18,7 +18,7 @@ services:
     host: containerapp
     project: ./src/api
     docker:
-      remote: true
+      remoteBuild: true
 hooks:
   postprovision:
     shell: sh

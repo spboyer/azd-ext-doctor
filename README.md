@@ -51,7 +51,6 @@ Checks for the presence and version of the following tools:
 - **Azure Tools**:
   - Azure Functions Core Tools
   - Azure Static Web Apps CLI (swa)
-  - Bicep
 - **Infrastructure as Code**:
   - Terraform
 - **Extensions**:

@@ -1,5 +1,9 @@
 # Release History
 
+## 0.0.5 - Maintenance Release
+
+- Maintenance updates and bug fixes.
+
 ## 0.0.4 - Remote Build Configuration
 
 - Added `configure remote-build` command to easily enable remote builds for container apps.

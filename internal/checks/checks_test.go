@@ -345,34 +345,17 @@ func TestCheckTerraform(t *testing.T) {
 }
 
 func TestCheckExtension(t *testing.T) {
-	origRunner := CommandRunner
-	defer func() { CommandRunner = origRunner }()
-
 	t.Run("Extension Found and Valid", func(t *testing.T) {
-		CommandRunner = &MockRunner{
-			OutputFunc: func(name string, args ...string) ([]byte, error) {
-				if name == "azd" && args[0] == "extension" && args[1] == "list" {
-					return []byte(`[{"name": "test-ext", "version": "1.0.0"}]`), nil
-				}
-				return nil, fmt.Errorf("unexpected command")
-			},
-		}
-		res := CheckExtension("test-ext", ">= 1.0.0")
+		extensions := []AzdExtension{{Id: "test.ext", Name: "test-ext", Version: "1.0.0"}}
+		res := CheckExtension(extensions, "test.ext", ">= 1.0.0")
 		assert.True(t, res.Installed)
 		assert.True(t, res.Running)
 		assert.Equal(t, "1.0.0", res.Version)
 	})
 
 	t.Run("Extension Found but Invalid Version", func(t *testing.T) {
-		CommandRunner = &MockRunner{
-			OutputFunc: func(name string, args ...string) ([]byte, error) {
-				if name == "azd" && args[0] == "extension" && args[1] == "list" {
-					return []byte(`[{"name": "test-ext", "version": "0.5.0"}]`), nil
-				}
-				return nil, fmt.Errorf("unexpected command")
-			},
-		}
-		res := CheckExtension("test-ext", ">= 1.0.0")
+		extensions := []AzdExtension{{Id: "test.ext", Name: "test-ext", Version: "0.5.0"}}
+		res := CheckExtension(extensions, "test.ext", ">= 1.0.0")
 		assert.True(t, res.Installed)
 		assert.False(t, res.Running)
 		assert.Equal(t, "0.5.0", res.Version)
@@ -380,15 +363,8 @@ func TestCheckExtension(t *testing.T) {
 	})
 
 	t.Run("Extension Not Found", func(t *testing.T) {
-		CommandRunner = &MockRunner{
-			OutputFunc: func(name string, args ...string) ([]byte, error) {
-				if name == "azd" && args[0] == "extension" && args[1] == "list" {
-					return []byte(`[]`), nil
-				}
-				return nil, fmt.Errorf("unexpected command")
-			},
-		}
-		res := CheckExtension("test-ext", ">= 1.0.0")
+		extensions := []AzdExtension{}
+		res := CheckExtension(extensions, "test.ext", ">= 1.0.0")
 		assert.False(t, res.Installed)
 		assert.Error(t, res.Error)
 	})

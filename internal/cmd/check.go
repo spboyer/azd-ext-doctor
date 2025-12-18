@@ -101,8 +101,13 @@ func NewCheckCommand() *cobra.Command {
 			if len(config.RequiredVersions.Extensions) > 0 {
 				fmt.Println()
 				printRunning("Extensions", "Checking requirements")
-				for name, version := range config.RequiredVersions.Extensions {
-					printResult(checks.CheckExtension(name, version))
+				installedExtensions, err := checks.GetInstalledExtensions()
+				if err != nil {
+					printFailure("Extensions", fmt.Sprintf("Failed to list: %v", err))
+				} else {
+					for name, version := range config.RequiredVersions.Extensions {
+						printResult(checks.CheckExtension(installedExtensions, name, version))
+					}
 				}
 			}
 

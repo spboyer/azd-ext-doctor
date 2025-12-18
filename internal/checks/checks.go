@@ -152,12 +152,13 @@ func CheckTerraform() CheckResult {
 }
 
 type AzdExtension struct {
+	Id      string `json:"id"`
 	Name    string `json:"name"`
 	Version string `json:"version"`
 }
 
 func GetInstalledExtensions() ([]AzdExtension, error) {
-	out, err := CommandRunner.Output("azd", "extension", "list", "--output", "json")
+	out, err := CommandRunner.Output("azd", "extension", "list", "--installed", "--output", "json")
 	if err != nil {
 		return nil, err
 	}
@@ -168,16 +169,11 @@ func GetInstalledExtensions() ([]AzdExtension, error) {
 	return extensions, nil
 }
 
-func CheckExtension(name, requiredRange string) CheckResult {
-	extensions, err := GetInstalledExtensions()
-	if err != nil {
-		return CheckResult{Name: "extension " + name, Installed: false, Error: fmt.Errorf("failed to list extensions: %w", err)}
-	}
-
+func CheckExtension(extensions []AzdExtension, id, requiredRange string) CheckResult {
 	var installedVer string
 	found := false
 	for _, ext := range extensions {
-		if ext.Name == name {
+		if ext.Id == id {
 			installedVer = ext.Version
 			found = true
 			break
@@ -185,22 +181,22 @@ func CheckExtension(name, requiredRange string) CheckResult {
 	}
 
 	if !found {
-		return CheckResult{Name: "extension " + name, Installed: false, Error: fmt.Errorf("extension not installed")}
+		return CheckResult{Name: "extension " + id, Installed: false, Error: fmt.Errorf("extension not installed")}
 	}
 
 	if requiredRange != "" {
 		v, err := semver.Parse(installedVer)
 		if err != nil {
-			return CheckResult{Name: "extension " + name, Installed: true, Version: installedVer, Error: fmt.Errorf("invalid installed version format: %w", err)}
+			return CheckResult{Name: "extension " + id, Installed: true, Version: installedVer, Error: fmt.Errorf("invalid installed version format: %w", err)}
 		}
 		expectedRange, err := semver.ParseRange(requiredRange)
 		if err != nil {
-			return CheckResult{Name: "extension " + name, Installed: true, Version: installedVer, Error: fmt.Errorf("invalid required version range: %w", err)}
+			return CheckResult{Name: "extension " + id, Installed: true, Version: installedVer, Error: fmt.Errorf("invalid required version range: %w", err)}
 		}
 		if !expectedRange(v) {
-			return CheckResult{Name: "extension " + name, Installed: true, Version: installedVer, Error: fmt.Errorf("version %s does not satisfy range %s", installedVer, requiredRange)}
+			return CheckResult{Name: "extension " + id, Installed: true, Version: installedVer, Error: fmt.Errorf("version %s does not satisfy range %s", installedVer, requiredRange)}
 		}
 	}
 
-	return CheckResult{Name: "extension " + name, Installed: true, Version: installedVer, Running: true}
+	return CheckResult{Name: "extension " + id, Installed: true, Version: installedVer, Running: true}
 }

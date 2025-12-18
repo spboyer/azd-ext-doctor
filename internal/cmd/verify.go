@@ -145,8 +145,13 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 
 	// Required Extensions Check
 	if len(config.RequiredVersions.Extensions) > 0 {
-		for name, version := range config.RequiredVersions.Extensions {
-			if err := requireCheck(checks.CheckExtension(name, version)); err != nil {
+		installedExtensions, err := checks.GetInstalledExtensions()
+		if err != nil {
+			safeCloseAzdClient(azdClient)
+			return fmt.Errorf("failed to list installed extensions: %w", err)
+		}
+		for id, version := range config.RequiredVersions.Extensions {
+			if err := requireCheck(checks.CheckExtension(installedExtensions, id, version)); err != nil {
 				safeCloseAzdClient(azdClient)
 				return err
 			}

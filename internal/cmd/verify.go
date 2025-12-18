@@ -236,7 +236,8 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 	return nil
 }
 
-// safeCloseAzdClient safely closes the azdClient if it's not nil
+// safeCloseAzdClient safely closes the azdClient if it's not nil.
+// Used to ensure proper cleanup of gRPC connections before early returns.
 func safeCloseAzdClient(client *azdext.AzdClient) {
 	if client != nil {
 		client.Close()

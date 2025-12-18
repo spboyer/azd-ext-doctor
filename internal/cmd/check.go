@@ -189,7 +189,7 @@ func NewCheckCommand() *cobra.Command {
 			defer cancel()
 			printResult(checks.CheckAzdLogin(authCtx, azdClient))
 
-			// Explicitly close the client before returning
+			// Ensure gRPC connection is closed before program exit
 			if azdClient != nil {
 				azdClient.Close()
 			}

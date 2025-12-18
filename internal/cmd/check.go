@@ -112,14 +112,15 @@ func NewCheckCommand() *cobra.Command {
 			provider := config.Infra.Provider
 			if provider == "terraform" {
 				printResult(checks.CheckTerraform())
+			} else {
+				// Default provider is bicep
+				if provider == "" {
+					provider = "bicep"
+				}
+				printInfo("Provider", provider)
 			}
 
 			// 8) Services
-			if len(config.Services) > 0 {
-				fmt.Println()
-				printRunning("Services", "Checking requirements")
-			}
-
 			checkedLangs := make(map[string]bool)
 			checkedTools := make(map[string]bool)
 

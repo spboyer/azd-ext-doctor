@@ -121,6 +121,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 	loginRes := checks.CheckAzdLogin(authCtx, azdClient)
 	if !loginRes.Installed || loginRes.Error != nil {
 		printFailure(loginRes.Name, "Not logged in or error")
+		safeCloseAzdClient(azdClient)
 		return fmt.Errorf("azd auth check failed: %v", loginRes.Error)
 	}
 	printSuccess(loginRes.Name, loginRes.Version)
@@ -132,11 +133,13 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 	}
 
 	if _, err := os.Stat(projectFile); os.IsNotExist(err) {
+		safeCloseAzdClient(azdClient)
 		return fmt.Errorf("project file (azure.yaml/yml) not found, required for %s", targetCommand)
 	}
 
 	config, err := checks.LoadProjectConfig(projectFile)
 	if err != nil {
+		safeCloseAzdClient(azdClient)
 		return fmt.Errorf("failed to load project config: %w", err)
 	}
 
@@ -144,6 +147,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 	if len(config.RequiredVersions.Extensions) > 0 {
 		for name, version := range config.RequiredVersions.Extensions {
 			if err := requireCheck(checks.CheckExtension(name, version)); err != nil {
+				safeCloseAzdClient(azdClient)
 				return err
 			}
 		}
@@ -155,6 +159,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 		// Default to bicep if empty
 		if provider == "terraform" {
 			if err := requireCheck(checks.CheckTerraform()); err != nil {
+				safeCloseAzdClient(azdClient)
 				return err
 			}
 		}
@@ -181,6 +186,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 
 				if res.Name != "" {
 					if err := requireCheck(res); err != nil {
+						safeCloseAzdClient(azdClient)
 						return err
 					}
 				}
@@ -194,6 +200,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 			if isContainerHost && !svc.Docker.Remote && needsBuild {
 				if !checkedTools["docker"] {
 					if err := requireCheck(checks.CheckDocker()); err != nil {
+						safeCloseAzdClient(azdClient)
 						return fmt.Errorf("%w\n\nTip: You can enable remote build in azure.yaml to build without local Docker:\n  services:\n    %s:\n      docker:\n        remoteBuild: true\n\nOr run:\n  azd doctor configure remote-build", err, svcName)
 					}
 					checkedTools["docker"] = true
@@ -204,6 +211,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 			if svc.Host == "function" {
 				if !checkedTools["func"] {
 					if err := requireCheck(checks.CheckAzureFunctionsCoreTools()); err != nil {
+						safeCloseAzdClient(azdClient)
 						return err
 					}
 					checkedTools["func"] = true
@@ -214,6 +222,7 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 			if svc.Host == "staticwebapp" {
 				if !checkedTools["swa"] {
 					if err := requireCheck(checks.CheckSwaCli()); err != nil {
+						safeCloseAzdClient(azdClient)
 						return err
 					}
 					checkedTools["swa"] = true
@@ -223,7 +232,16 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 	}
 
 	printSuccess("Verification", "Passed")
+	safeCloseAzdClient(azdClient)
 	return nil
+}
+
+// safeCloseAzdClient safely closes the azdClient if it's not nil.
+// Used to ensure proper cleanup of gRPC connections before early returns.
+func safeCloseAzdClient(client *azdext.AzdClient) {
+	if client != nil {
+		client.Close()
+	}
 }
 
 func requireCheck(res checks.CheckResult) error {

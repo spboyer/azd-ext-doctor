@@ -180,6 +180,9 @@ func NewCheckCommand() *cobra.Command {
 			fmt.Println()
 			if skipAuth {
 				printInfo("Azd Auth", "Skipped")
+				if azdClient != nil {
+					azdClient.Close()
+				}
 				return nil
 			}
 			printRunning("Azd Auth", "Checking login status")
@@ -187,6 +190,10 @@ func NewCheckCommand() *cobra.Command {
 			defer cancel()
 			printResult(checks.CheckAzdLogin(authCtx, azdClient))
 
+			// Ensure gRPC connection is closed before program exit
+			if azdClient != nil {
+				azdClient.Close()
+			}
 			return nil
 		},
 	}

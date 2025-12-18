@@ -12,7 +12,7 @@ An `azd` extension that checks for necessary prerequisites based on the current 
 
 ```bash
 # Enable extensions
-azd config set alpha.extensions.enabled on
+azd config set alpha.extensions on
 
 # Add azd-doctor extension source
 azd extension source add -n doctor -t url -l https://raw.githubusercontent.com/spboyer/azd-ext-doctor/main/registry.json
@@ -51,7 +51,6 @@ Checks for the presence and version of the following tools:
 - **Azure Tools**:
   - Azure Functions Core Tools
   - Azure Static Web Apps CLI (swa)
-  - Bicep
 - **Infrastructure as Code**:
   - Terraform
 - **Extensions**:

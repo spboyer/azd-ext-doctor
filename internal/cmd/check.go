@@ -179,7 +179,9 @@ func NewCheckCommand() *cobra.Command {
 			fmt.Println()
 			if skipAuth {
 				printInfo("Azd Auth", "Skipped")
-				azdClient.Close()
+				if azdClient != nil {
+					azdClient.Close()
+				}
 				return nil
 			}
 			printRunning("Azd Auth", "Checking login status")
@@ -188,7 +190,9 @@ func NewCheckCommand() *cobra.Command {
 			printResult(checks.CheckAzdLogin(authCtx, azdClient))
 
 			// Explicitly close the client before returning
-			azdClient.Close()
+			if azdClient != nil {
+				azdClient.Close()
+			}
 			return nil
 		},
 	}

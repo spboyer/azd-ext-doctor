@@ -5,7 +5,7 @@ description: Checks for pre-reqs and template requirements as needed.
 displayName: azd doctor
 id: spboyer.azd.doctor
 language: go
-namespace: doctor
+namespace: app
 usage: azd doctor <command> [options]
 version: 0.0.6
 examples:

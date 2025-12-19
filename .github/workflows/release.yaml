@@ -49,6 +49,11 @@ jobs:
           # Extract version from tag (remove 'v' prefix)
           VERSION=${GITHUB_REF_NAME#v}
           
+          # Switch to main branch to ensure we're updating the latest
+          git fetch origin main
+          git checkout main
+          git pull origin main
+          
           # Run update script
           python3 scripts/update_registry.py dist/checksums.txt registry.json $VERSION
           
@@ -57,5 +62,5 @@ jobs:
           git config --global user.email "actions@github.com"
           git add registry.json
           git commit -m "chore: Update registry checksums for $VERSION" || echo "No changes to commit"
-          git push origin HEAD:main
+          git push origin main
 

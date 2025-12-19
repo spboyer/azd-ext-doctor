@@ -29,6 +29,11 @@ To upgrade the extension to the latest version:
 azd extension upgrade spboyer.azd.doctor
 ```
 
+> **Note:** If the upgrade command does not detect the latest version due to caching, use the install command with the `--force` flag:
+> ```bash
+> azd extension install spboyer.azd.doctor --force
+> ```
+
 To upgrade all extensions:
 
 ```bash

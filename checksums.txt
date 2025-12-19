@@ -1,6 +1,6 @@
-ea72e916848f1531566acd12861eb880e9a55b9b4772984cc0bb1b6de22951ee  azd-ext-doctor-darwin-amd64.zip
-4831bf497d7d011a008611465a2d76ef44b73f82316a8591c5b6342ba36677c0  azd-ext-doctor-darwin-arm64.zip
-376ad9660a7580512d399013cfbfa55f692010dabfc72197090eb231aae9e471  azd-ext-doctor-linux-amd64.tar.gz
-211b6dba4fe75262832633e84b218dc911d9dc53c6dd66e7a23d45303a6f583e  azd-ext-doctor-linux-arm64.tar.gz
-07b8b60be7249562178052f2773ccf9004ff40d9ec8746555684935a9d9a3da8  azd-ext-doctor-windows-amd64.zip
-a0f51a15111dc38c2d6450efaafe82334d9db685714f72f4b7830cd1407aa3d3  azd-ext-doctor-windows-arm64.zip
+8205012a4c10c1b467de5e5e1390bbe8138dfebaa5d5ef0bc9f3ba916e185f7f  azd-ext-doctor-darwin-amd64.zip
+ab354e278a5716b1150fecdf7cbeccd647bba43349360ddb0b792a0fb54afe6f  azd-ext-doctor-darwin-arm64.zip
+41f71422146fbc35e2c901c37a9da5291e3ca6844b33db2413c1d4e550695b52  azd-ext-doctor-linux-amd64.tar.gz
+290051fa6281591e5a9f933594dade7216b197443c30fdc9a37ae850ac472400  azd-ext-doctor-linux-arm64.tar.gz
+8271855497314532ad37f118c7b6b19e5d907ae94bca4cecc2e4fa1964dc6bdb  azd-ext-doctor-windows-amd64.zip
+f906ccce71a70474c24188be009b6b5abcc76e6484c2029aa8728e2c6830335c  azd-ext-doctor-windows-arm64.zip

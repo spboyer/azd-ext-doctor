@@ -1,5 +1,9 @@
 # Release History
 
+## 0.1.1 - Bug Fix
+
+- Fixed issue where `azd doctor` would fail when running in extension mode due to missing `listen` command.
+
 ## 0.1.0 - Documentation Update
 
 - Updated installation instructions to use `doc` as the source name.

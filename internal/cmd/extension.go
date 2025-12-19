@@ -6,7 +6,20 @@ import (
 	"time"
 
 	"github.com/azure/azure-dev/cli/azd/pkg/azdext"
+	"github.com/spf13/cobra"
 )
+
+func NewListenCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:    "listen",
+		Short:  "Starts the extension in server mode",
+		Hidden: true,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return RunExtensionHost(cmd.Context())
+		},
+	}
+	return cmd
+}
 
 func RunExtensionHost(ctx context.Context) error {
 	client, err := azdext.NewAzdClient()

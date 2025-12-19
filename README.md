@@ -139,7 +139,7 @@ You can bypass the verification check by setting the `AZD_DOCTOR_SKIP_VERIFY` en
   export AZD_DOCTOR_SKIP_VERIFY=true
   # or
   export AZD_DOCTOR_SKIP_VERIFY=all
-  ```
+`  ```
 
 - **Skip for specific commands**:
   ```bash

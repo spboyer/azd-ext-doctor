@@ -2,12 +2,12 @@
   "extensions": [
     {
       "id": "spboyer.azd.doctor",
-      "namespace": "app",
+      "namespace": "doctor",
       "displayName": "azd doctor",
       "description": "Checks for pre-reqs and template requirements as needed.",
       "versions": [
         {
-          "version": "0.0.6",
+          "version": "0.1.0",
           "capabilities": [
             "custom-commands",
             "lifecycle-events"
@@ -42,7 +42,7 @@
                 "value": "329aedf5691fa13cff4497f0bc2f1a7b601df3e5f42bdc1e9df4abfda8e20152"
               },
               "entryPoint": "azd-ext-doctor",
-              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.6/azd-ext-doctor-darwin-amd64.zip"
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-darwin-amd64.zip"
             },
             "darwin/arm64": {
               "checksum": {
@@ -50,7 +50,7 @@
                 "value": "21e93e3cdf7d0050e4822e6e06de13ea4726e6c02d9d76a7fb2082cc65887554"
               },
               "entryPoint": "azd-ext-doctor",
-              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.6/azd-ext-doctor-darwin-arm64.zip"
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-darwin-arm64.zip"
             },
             "linux/amd64": {
               "checksum": {
@@ -58,7 +58,7 @@
                 "value": "a5e8db0e1c344c03b92a2ce1dde167355590eb142fd49e7ca68eaff9eba696b6"
               },
               "entryPoint": "azd-ext-doctor",
-              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.6/azd-ext-doctor-linux-amd64.tar.gz"
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-linux-amd64.tar.gz"
             },
             "linux/arm64": {
               "checksum": {
@@ -66,7 +66,7 @@
                 "value": "f2bc2de65fdc07de3adeb9370f10e93c294450f629031769cc775858603cf82d"
               },
               "entryPoint": "azd-ext-doctor",
-              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.6/azd-ext-doctor-linux-arm64.tar.gz"
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-linux-arm64.tar.gz"
             },
             "windows/amd64": {
               "checksum": {
@@ -74,7 +74,7 @@
                 "value": "3ddbc76b87c35ccc45b0400c24c5c3a6f5522726d3d40f847b7902c63b8b83b9"
               },
               "entryPoint": "azd-ext-doctor.exe",
-              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.6/azd-ext-doctor-windows-amd64.zip"
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-windows-amd64.zip"
             },
             "windows/arm64": {
               "checksum": {
@@ -82,7 +82,7 @@
                 "value": "a69b79bf9ad6d29ffaa106d8be6a4d7cd0ca695fc25573fb64ba0235951476c8"
               },
               "entryPoint": "azd-ext-doctor.exe",
-              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.6/azd-ext-doctor-windows-arm64.zip"
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-windows-arm64.zip"
             }
           }
         },

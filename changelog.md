@@ -1,5 +1,10 @@
 # Release History
 
+## 0.1.0 - Documentation Update
+
+- Updated installation instructions to use `doc` as the source name.
+- Added upgrade instructions to README.
+
 ## 0.0.6 - Patch Release
 
 - Project maintenance and documentation updates.

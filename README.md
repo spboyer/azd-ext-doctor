@@ -15,7 +15,7 @@ An `azd` extension that checks for necessary prerequisites based on the current 
 azd config set alpha.extensions on
 
 # Add azd-doctor extension source
-azd extension source add -n app -t url -l https://raw.githubusercontent.com/spboyer/azd-ext-doctor/main/registry.json
+azd extension source add -n doc -t url -l https://raw.githubusercontent.com/spboyer/azd-ext-doctor/main/registry.json
 
 # Install the extension
 azd extension install spboyer.azd.doctor

@@ -7,7 +7,7 @@ id: spboyer.azd.doctor
 language: go
 namespace: doctor
 usage: azd doctor <command> [options]
-version: 0.0.5
+version: 0.0.6
 examples:
   - name: check
     description: Checks all prerequisites.

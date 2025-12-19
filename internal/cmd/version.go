@@ -11,7 +11,7 @@ import (
 
 var (
 	// Populated at build time
-	Version   = "0.0.5" // Default value for development builds
+	Version   = "0.0.6" // Default value for development builds
 	Commit    = "none"
 	BuildDate = "unknown"
 )

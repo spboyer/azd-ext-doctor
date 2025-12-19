@@ -1,5 +1,9 @@
 # Release History
 
+## 0.0.6 - Patch Release
+
+- Project maintenance and documentation updates.
+
 ## 0.0.5 - Maintenance Release
 
 - Maintenance updates and bug fixes.

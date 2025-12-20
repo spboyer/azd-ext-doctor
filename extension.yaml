@@ -7,7 +7,7 @@ id: spboyer.azd.doctor
 language: go
 namespace: doctor
 usage: azd doctor <command> [options]
-version: 0.0.2
+version: 0.1.1
 examples:
   - name: check
     description: Checks all prerequisites.
@@ -18,3 +18,6 @@ examples:
   - name: verify
     description: Verify environment requirements for a specific azd command (up, provision, deploy). Checks tools, auth, and project config.
     usage: azd doctor verify --command <command>
+  - name: configure
+    description: Configure project settings.
+    usage: azd doctor configure remote-build

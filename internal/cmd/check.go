@@ -101,8 +101,13 @@ func NewCheckCommand() *cobra.Command {
 			if len(config.RequiredVersions.Extensions) > 0 {
 				fmt.Println()
 				printRunning("Extensions", "Checking requirements")
-				for name, version := range config.RequiredVersions.Extensions {
-					printResult(checks.CheckExtension(name, version))
+				installedExtensions, err := checks.GetInstalledExtensions()
+				if err != nil {
+					printFailure("Extensions", fmt.Sprintf("Failed to list: %v", err))
+				} else {
+					for name, version := range config.RequiredVersions.Extensions {
+						printResult(checks.CheckExtension(installedExtensions, name, version))
+					}
 				}
 			}
 
@@ -110,18 +115,17 @@ func NewCheckCommand() *cobra.Command {
 			fmt.Println()
 			printRunning("Infra", "Checking requirements")
 			provider := config.Infra.Provider
-			if provider == "" || provider == "bicep" {
-				printResult(checks.CheckBicep())
-			} else if provider == "terraform" {
+			if provider == "terraform" {
 				printResult(checks.CheckTerraform())
+			} else {
+				// Default provider is bicep
+				if provider == "" {
+					provider = "bicep"
+				}
+				printInfo("Provider", provider)
 			}
 
 			// 8) Services
-			if len(config.Services) > 0 {
-				fmt.Println()
-				printRunning("Services", "Checking requirements")
-			}
-
 			checkedLangs := make(map[string]bool)
 			checkedTools := make(map[string]bool)
 
@@ -181,6 +185,9 @@ func NewCheckCommand() *cobra.Command {
 			fmt.Println()
 			if skipAuth {
 				printInfo("Azd Auth", "Skipped")
+				if azdClient != nil {
+					azdClient.Close()
+				}
 				return nil
 			}
 			printRunning("Azd Auth", "Checking login status")
@@ -188,6 +195,10 @@ func NewCheckCommand() *cobra.Command {
 			defer cancel()
 			printResult(checks.CheckAzdLogin(authCtx, azdClient))
 
+			// Ensure gRPC connection is closed before program exit
+			if azdClient != nil {
+				azdClient.Close()
+			}
 			return nil
 		},
 	}

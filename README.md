@@ -12,10 +12,29 @@ An `azd` extension that checks for necessary prerequisites based on the current 
 
 ```bash
 # Add azd-doctor extension source
-azd extension source add -n doctor -t url -l https://raw.githubusercontent.com/spboyer/azd-ext-doctor/main/registry.json
+azd extension source add -n doc -t url -l https://raw.githubusercontent.com/spboyer/azd-ext-doctor/main/registry.json
 
 # Install the extension
 azd extension install spboyer.azd.doctor
+```
+
+### Upgrade
+
+To upgrade the extension to the latest version:
+
+```bash
+azd extension upgrade spboyer.azd.doctor
+```
+
+> **Note:** If the upgrade command does not detect the latest version due to caching, use the install command with the `--force` flag:
+> ```bash
+> azd extension install spboyer.azd.doctor --force
+> ```
+
+To upgrade all extensions:
+
+```bash
+azd extension upgrade --all
 ```
 
 ### Install (Local Development)
@@ -48,7 +67,6 @@ Checks for the presence and version of the following tools:
 - **Azure Tools**:
   - Azure Functions Core Tools
   - Azure Static Web Apps CLI (swa)
-  - Bicep
 - **Infrastructure as Code**:
   - Terraform
 - **Extensions**:
@@ -82,9 +100,22 @@ Verifies that the environment meets the requirements specified in `azure.yaml`. 
 It checks:
 - Required tools based on the project configuration (e.g., `swa` if using Static Web Apps, `terraform` if using Terraform).
 - Required extension versions specified in `requiredVersions.extensions`.
+- Suggests enabling `remoteBuild` if Docker is missing for container apps.
 
 ```bash
 azd doctor verify
+```
+
+### `configure`
+
+Helps configure project settings in `azure.yaml`.
+
+#### `remote-build`
+
+Enables remote build (`docker.remoteBuild: true`) for all services using `containerapp` or `aks` host. This is useful when local Docker is not available.
+
+```bash
+azd doctor configure remote-build
 ```
 
 ### `context`
@@ -110,7 +141,7 @@ You can bypass the verification check by setting the `AZD_DOCTOR_SKIP_VERIFY` en
   export AZD_DOCTOR_SKIP_VERIFY=true
   # or
   export AZD_DOCTOR_SKIP_VERIFY=all
-  ```
+`  ```
 
 - **Skip for specific commands**:
   ```bash

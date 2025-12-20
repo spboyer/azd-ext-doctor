@@ -7,6 +7,246 @@
       "description": "Checks for pre-reqs and template requirements as needed.",
       "versions": [
         {
+          "version": "0.1.1",
+          "capabilities": [
+            "custom-commands",
+            "lifecycle-events"
+          ],
+          "usage": "azd doctor <command> [options]",
+          "examples": [
+            {
+              "name": "check",
+              "description": "Checks all prerequisites.",
+              "usage": "azd doctor check"
+            },
+            {
+              "name": "verify",
+              "description": "Verify environment requirements for a specific azd command (up, provision, deploy). Checks tools, auth, and project config.",
+              "usage": "azd doctor verify --command <command>"
+            },
+            {
+              "name": "context",
+              "description": "Get the context of the AZD project & environment.",
+              "usage": "azd doctor context"
+            },
+            {
+              "name": "configure",
+              "description": "Configure project settings.",
+              "usage": "azd doctor configure remote-build"
+            }
+          ],
+          "artifacts": {
+            "darwin/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "10685ceb6d694cf96e63b6eb1bb499491447db808cb0f0a43b1d932191e513a3"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.1/azd-ext-doctor-darwin-amd64.zip"
+            },
+            "darwin/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "dede6048d0ee1fd5cf35a204a0ce3b49a547faa68bf6ce96a343f8cecf15fbcf"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.1/azd-ext-doctor-darwin-arm64.zip"
+            },
+            "linux/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "547af60c3bacf3ffa06e2ecd37d7d7b0f4ff3eae98f0701075f8654127c5054d"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.1/azd-ext-doctor-linux-amd64.tar.gz"
+            },
+            "linux/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "b371396ae732770aea32669f470c76c3f02b4a3e8a01042636e4f67350ac381b"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.1/azd-ext-doctor-linux-arm64.tar.gz"
+            },
+            "windows/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "47dd1c73f673deffbb1e404af9f46dbb804e061e70cb11d40e85aaedcbcd35b3"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.1/azd-ext-doctor-windows-amd64.zip"
+            },
+            "windows/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "7a0938592f6ec5756a3dc23476738bc48ec8decf18229d3b152c33c32dc3053a"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.1/azd-ext-doctor-windows-arm64.zip"
+            }
+          }
+        },
+        {
+          "version": "0.1.0",
+          "capabilities": [
+            "custom-commands",
+            "lifecycle-events"
+          ],
+          "usage": "azd doctor <command> [options]",
+          "examples": [
+            {
+              "name": "check",
+              "description": "Checks all prerequisites.",
+              "usage": "azd doctor check"
+            },
+            {
+              "name": "verify",
+              "description": "Verify environment requirements for a specific azd command (up, provision, deploy). Checks tools, auth, and project config.",
+              "usage": "azd doctor verify --command <command>"
+            },
+            {
+              "name": "context",
+              "description": "Get the context of the AZD project & environment.",
+              "usage": "azd doctor context"
+            },
+            {
+              "name": "configure",
+              "description": "Configure project settings.",
+              "usage": "azd doctor configure remote-build"
+            }
+          ],
+          "artifacts": {
+            "darwin/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "ea72e916848f1531566acd12861eb880e9a55b9b4772984cc0bb1b6de22951ee"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-darwin-amd64.zip"
+            },
+            "darwin/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "4831bf497d7d011a008611465a2d76ef44b73f82316a8591c5b6342ba36677c0"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-darwin-arm64.zip"
+            },
+            "linux/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "376ad9660a7580512d399013cfbfa55f692010dabfc72197090eb231aae9e471"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-linux-amd64.tar.gz"
+            },
+            "linux/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "211b6dba4fe75262832633e84b218dc911d9dc53c6dd66e7a23d45303a6f583e"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-linux-arm64.tar.gz"
+            },
+            "windows/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "07b8b60be7249562178052f2773ccf9004ff40d9ec8746555684935a9d9a3da8"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-windows-amd64.zip"
+            },
+            "windows/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "a0f51a15111dc38c2d6450efaafe82334d9db685714f72f4b7830cd1407aa3d3"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.1.0/azd-ext-doctor-windows-arm64.zip"
+            }
+          }
+        },
+        {
+          "version": "0.0.5",
+          "capabilities": [
+            "custom-commands",
+            "lifecycle-events"
+          ],
+          "usage": "azd doctor <command> [options]",
+          "examples": [
+            {
+              "name": "check",
+              "description": "Checks all prerequisites.",
+              "usage": "azd doctor check"
+            },
+            {
+              "name": "verify",
+              "description": "Verify environment requirements for a specific azd command (up, provision, deploy). Checks tools, auth, and project config.",
+              "usage": "azd doctor verify --command <command>"
+            },
+            {
+              "name": "context",
+              "description": "Get the context of the AZD project & environment.",
+              "usage": "azd doctor context"
+            },
+            {
+              "name": "configure",
+              "description": "Configure project settings.",
+              "usage": "azd doctor configure remote-build"
+            }
+          ],
+          "artifacts": {
+            "darwin/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "329aedf5691fa13cff4497f0bc2f1a7b601df3e5f42bdc1e9df4abfda8e20152"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.5/azd-ext-doctor-darwin-amd64.zip"
+            },
+            "darwin/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "21e93e3cdf7d0050e4822e6e06de13ea4726e6c02d9d76a7fb2082cc65887554"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.5/azd-ext-doctor-darwin-arm64.zip"
+            },
+            "linux/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "a5e8db0e1c344c03b92a2ce1dde167355590eb142fd49e7ca68eaff9eba696b6"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.5/azd-ext-doctor-linux-amd64.tar.gz"
+            },
+            "linux/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "f2bc2de65fdc07de3adeb9370f10e93c294450f629031769cc775858603cf82d"
+              },
+              "entryPoint": "azd-ext-doctor",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.5/azd-ext-doctor-linux-arm64.tar.gz"
+            },
+            "windows/amd64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "3ddbc76b87c35ccc45b0400c24c5c3a6f5522726d3d40f847b7902c63b8b83b9"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.5/azd-ext-doctor-windows-amd64.zip"
+            },
+            "windows/arm64": {
+              "checksum": {
+                "algorithm": "sha256",
+                "value": "a69b79bf9ad6d29ffaa106d8be6a4d7cd0ca695fc25573fb64ba0235951476c8"
+              },
+              "entryPoint": "azd-ext-doctor.exe",
+              "url": "https://github.com/spboyer/azd-ext-doctor/releases/download/v0.0.5/azd-ext-doctor-windows-arm64.zip"
+            }
+          }
+        },
+        {
           "version": "0.0.2",
           "capabilities": [
             "custom-commands",

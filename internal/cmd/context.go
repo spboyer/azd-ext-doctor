@@ -64,6 +64,9 @@ func newContextCommand() *cobra.Command {
 			} else {
 				color.Yellow("WARNING: No azd project found in current working directory")
 				fmt.Printf("Run %s to create a new project.\n", color.CyanString("azd init"))
+				if azdClient != nil {
+					azdClient.Close()
+				}
 				return nil
 			}
 
@@ -76,6 +79,9 @@ func newContextCommand() *cobra.Command {
 			} else {
 				color.Yellow("WARNING: No azd environment(s) found.")
 				fmt.Printf("Run %s to create a new environment.\n", color.CyanString("azd env new"))
+				if azdClient != nil {
+					azdClient.Close()
+				}
 				return nil
 			}
 
@@ -149,6 +155,9 @@ func newContextCommand() *cobra.Command {
 				}
 			}
 
+			if azdClient != nil {
+				azdClient.Close()
+			}
 			return nil
 		},
 	}

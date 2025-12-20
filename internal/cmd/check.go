@@ -159,7 +159,16 @@ func NewCheckCommand() *cobra.Command {
 
 				if isContainerHost && !svc.Docker.Remote && needsBuild {
 					if !checkedTools["docker"] {
-						printResult(checks.CheckDocker())
+						dockerCheck := checks.CheckDocker()
+						printResult(dockerCheck)
+						// If Docker daemon is not running, suggest remote-build
+						if dockerCheck.Installed && dockerCheck.HasDaemon && !dockerCheck.Running {
+							fmt.Fprintf(getOutputWriter(), "\n%s %s\n",
+								color.YellowString("💡 Tip:"),
+								"Enable remote build to build without local Docker:")
+							fmt.Fprintf(getOutputWriter(), "   Run: %s\n\n",
+								color.CyanString("azd doctor configure remote-build"))
+						}
 						checkedTools["docker"] = true
 					}
 				}

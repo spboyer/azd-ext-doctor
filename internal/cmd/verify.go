@@ -18,7 +18,7 @@ func NewVerifyCommand() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "verify",
-		Short: "Verify environment for a specific azd command (up, provision, deploy)",
+		Short: "Verify environment for a specific azd command (up, package, provision, deploy)",
 		Long: `Verifies that the environment meets all requirements for running a specific azd command.
 
 This command performs strict checks for:
@@ -26,13 +26,13 @@ This command performs strict checks for:
 - Authentication status (must be logged in)
 - Project-specific requirements based on azure.yaml (languages, Docker, Functions Core Tools)
 
-It is automatically invoked by azd before 'up', 'provision', and 'deploy' commands, but can also be run manually for debugging.`,
+It is automatically invoked by azd before 'up', 'package', 'provision', and 'deploy' commands, but can also be run manually for debugging.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return RunVerify(cmd.Context(), targetCommand, authTimeout)
 		},
 	}
 
-	cmd.Flags().StringVar(&targetCommand, "command", "up", "The azd command to verify for (up, provision, deploy)")
+	cmd.Flags().StringVar(&targetCommand, "command", "up", "The azd command to verify for (up, package, provision, deploy)")
 	cmd.Flags().DurationVar(&authTimeout, "auth-timeout", 5*time.Second, "Timeout for azd auth status check")
 
 	return cmd
@@ -58,6 +58,8 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 	hookName := os.Getenv("AZD_HOOK_NAME")
 	if hookName != "" {
 		switch hookName {
+		case "prepackage":
+			targetCommand = "package"
 		case "predeploy":
 			targetCommand = "deploy"
 		case "preprovision":
@@ -81,8 +83,8 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 		}
 	}
 
-	if targetCommand != "up" && targetCommand != "provision" && targetCommand != "deploy" {
-		return fmt.Errorf("invalid command target: %s. Must be one of: up, provision, deploy", targetCommand)
+	if targetCommand != "up" && targetCommand != "package" && targetCommand != "provision" && targetCommand != "deploy" {
+		return fmt.Errorf("invalid command target: %s. Must be one of: up, package, provision, deploy", targetCommand)
 	}
 
 	printRunning("Verifying for", targetCommand)
@@ -170,8 +172,8 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 		}
 	}
 
-	// Service Checks (deploy/up)
-	if targetCommand == "deploy" || targetCommand == "up" {
+	// Service Checks (package/deploy/up)
+	if targetCommand == "package" || targetCommand == "deploy" || targetCommand == "up" {
 		// Check Services
 		checkedLangs := make(map[string]bool)
 		checkedTools := make(map[string]bool)
@@ -204,9 +206,12 @@ func RunVerify(ctx context.Context, targetCommand string, authTimeout time.Durat
 
 			if isContainerHost && !svc.Docker.Remote && needsBuild {
 				if !checkedTools["docker"] {
-					if err := requireCheck(checks.CheckDocker()); err != nil {
+					dockerCheck := checks.CheckDocker()
+					if err := requireCheck(dockerCheck); err != nil {
 						safeCloseAzdClient(azdClient)
-						return fmt.Errorf("%w\n\nTip: You can enable remote build in azure.yaml to build without local Docker:\n  services:\n    %s:\n      docker:\n        remoteBuild: true\n\nOr run:\n  azd doctor configure remote-build", err, svcName)
+						// Provide helpful suggestion for Docker issues
+						suggestion := fmt.Sprintf("\n\nTip: You can enable remote build in azure.yaml to build without local Docker:\n  services:\n    %s:\n      docker:\n        remoteBuild: true\n\nOr run:\n  azd doctor configure remote-build", svcName)
+						return fmt.Errorf("%w%s", err, suggestion)
 					}
 					checkedTools["docker"] = true
 				}

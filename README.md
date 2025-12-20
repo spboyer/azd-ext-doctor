@@ -2,6 +2,16 @@
 
 An `azd` extension that checks for necessary prerequisites based on the current project's configuration.
 
+## Known Issues
+
+### Docker Checks During Lifecycle Events
+
+Currently, the extension's lifecycle event handlers (prepackage, preprovision, predeploy) **do not execute** when Docker daemon is not running. This is because `azd` validates all required tools (including Docker) *before* firing lifecycle events, creating a catch-22 where the extension cannot suggest alternatives like remote-build.
+
+**Workaround**: Run `azd doctor check` manually before `azd up/package/deploy` to get helpful suggestions when Docker is unavailable.
+
+**Status**: Feature request filed with the Azure Developer CLI team to add pre-tool-validation lifecycle events: [azure/azure-dev#6424](https://github.com/Azure/azure-dev/issues/6424)
+
 ## Screenshot
 
 ![Example output for `azd doctor check`](docs/images/doctor-check.png)

@@ -369,3 +369,258 @@ func TestCheckExtension(t *testing.T) {
 		assert.Error(t, res.Error)
 	})
 }
+
+func TestCheckDockerWithOS(t *testing.T) {
+	origRunner := CommandRunner
+	defer func() { CommandRunner = origRunner }()
+
+	t.Run("Docker on macOS", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "docker" && args[0] == "--version" {
+					return []byte("Docker version 24.0.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+			RunFunc: func(name string, args ...string) error {
+				if name == "docker" && args[0] == "info" {
+					return nil // Daemon running
+				}
+				return fmt.Errorf("not running")
+			},
+		}
+
+		res := CheckDockerWithOS("darwin")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "docker", res.Name)
+		assert.True(t, res.Running)
+	})
+
+	t.Run("Podman on Linux", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "podman" && args[0] == "--version" {
+					return []byte("podman version 4.5.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+			RunFunc: func(name string, args ...string) error {
+				if name == "podman" && args[0] == "info" {
+					return nil
+				}
+				return fmt.Errorf("not running")
+			},
+		}
+
+		res := CheckDockerWithOS("linux")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "podman", res.Name)
+		assert.True(t, res.Running)
+	})
+
+	t.Run("Docker daemon not running on Windows", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "docker" && args[0] == "--version" {
+					return []byte("Docker version 24.0.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+			RunFunc: func(name string, args ...string) error {
+				if name == "docker" && args[0] == "info" {
+					return fmt.Errorf("daemon not running")
+				}
+				return fmt.Errorf("error")
+			},
+		}
+
+		res := CheckDockerWithOS("windows")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "docker", res.Name)
+		assert.False(t, res.Running)
+		assert.Error(t, res.Error)
+	})
+
+	t.Run("Neither docker nor podman found", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckDockerWithOS("linux")
+		assert.False(t, res.Installed)
+		assert.Equal(t, "docker/podman", res.Name)
+	})
+}
+
+func TestCheckPythonWithOS(t *testing.T) {
+	origRunner := CommandRunner
+	defer func() { CommandRunner = origRunner }()
+
+	t.Run("Python3 on Linux", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "python3" && args[0] == "--version" {
+					return []byte("Python 3.11.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPythonWithOS("linux")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "python3", res.Name)
+	})
+
+	t.Run("Python on Windows", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "python" && args[0] == "--version" {
+					return []byte("Python 3.11.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPythonWithOS("windows")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "python", res.Name)
+	})
+
+	t.Run("Fallback from python3 to python on macOS", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "python" && args[0] == "--version" {
+					return []byte("Python 3.11.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPythonWithOS("darwin")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "python", res.Name)
+	})
+
+	t.Run("Python not found", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPythonWithOS("linux")
+		assert.False(t, res.Installed)
+		assert.Equal(t, "python", res.Name)
+	})
+}
+
+func TestCheckPwshWithOS(t *testing.T) {
+	origRunner := CommandRunner
+	defer func() { CommandRunner = origRunner }()
+
+	t.Run("Pwsh on Windows", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "pwsh" && args[0] == "--version" {
+					return []byte("PowerShell 7.4.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPwshWithOS("windows")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "pwsh", res.Name)
+	})
+
+	t.Run("Fallback to powershell on Windows", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "powershell" && args[0] == "--version" {
+					return []byte("5.1.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPwshWithOS("windows")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "powershell", res.Name)
+	})
+
+	t.Run("Pwsh on macOS", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "pwsh" && args[0] == "--version" {
+					return []byte("PowerShell 7.4.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPwshWithOS("darwin")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "pwsh", res.Name)
+	})
+
+	t.Run("PowerShell not found on Linux", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckPwshWithOS("linux")
+		assert.False(t, res.Installed)
+		assert.Equal(t, "pwsh/powershell", res.Name)
+	})
+}
+
+func TestCheckBashWithOS(t *testing.T) {
+	origRunner := CommandRunner
+	defer func() { CommandRunner = origRunner }()
+
+	t.Run("Bash on Linux", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "bash" && args[0] == "--version" {
+					return []byte("GNU bash, version 5.1.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckBashWithOS("linux")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "bash", res.Name)
+	})
+
+	t.Run("Bash on Windows (Git Bash)", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				if name == "bash" && args[0] == "--version" {
+					return []byte("GNU bash, version 4.4.0"), nil
+				}
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckBashWithOS("windows")
+		assert.True(t, res.Installed)
+		assert.Equal(t, "bash", res.Name)
+	})
+
+	t.Run("Bash not found on Windows", func(t *testing.T) {
+		CommandRunner = &MockRunner{
+			OutputFunc: func(name string, args ...string) ([]byte, error) {
+				return nil, fmt.Errorf("not found")
+			},
+		}
+
+		res := CheckBashWithOS("windows")
+		assert.False(t, res.Installed)
+		assert.Equal(t, "bash", res.Name)
+	})
+}

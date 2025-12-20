@@ -66,6 +66,23 @@ This is a Go-based CLI extension for the Azure Developer CLI (`azd`). It is buil
 - **Structure**: Prefer table-driven tests for covering multiple scenarios (e.g., different env vars or inputs).
 - **Isolation**: Tests in `internal/cmd` should not execute real external commands; always mock.
 
+### OS-Specific Tool Detection
+- **Pattern**: Public check functions (e.g., `CheckDocker()`) call OS-aware variants (e.g., `CheckDockerWithOS(goos string)`) using `runtime.GOOS`.
+- **Testing**: OS-specific functions accept `goos` parameter for testing different platforms without changing the OS.
+- **Implementation Details**:
+  - **Docker/Podman**: macOS/Windows prioritize Docker Desktop; Linux checks both Docker and Podman
+  - **Python**: Windows checks `python` first; macOS/Linux check `python3` first (avoids Python 2.x)
+  - **PowerShell**: Windows checks `pwsh` then `powershell`; Unix only checks `pwsh`
+  - **Bash**: Standard on Unix; optional on Windows (Git Bash, WSL, Cygwin)
+- **Test Structure**: Each OS-specific function has dedicated tests covering all platforms:
+  ```go
+  func TestCheckDockerWithOS(t *testing.T) {
+      t.Run("Docker on macOS", ...)
+      t.Run("Podman on Linux", ...)
+      t.Run("Docker daemon not running on Windows", ...)
+  }
+  ```
+
 ### Documentation & Maintenance
 - **README**: Keep `README.md` and installation instructions up-to-date with any feature changes or new commands.
 - **Changelog**: Update `changelog.md` for every release or significant change.

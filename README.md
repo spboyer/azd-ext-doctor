@@ -55,6 +55,28 @@ azd extension install microsoft.azd.extensions
 azd x build
 ```
 
+## Cross-Platform Support
+
+The extension is designed to work across macOS, Linux, and Windows with OS-aware tool detection:
+
+### Docker/Podman Detection
+- **macOS/Windows**: Checks for Docker Desktop first (most common)
+- **Linux**: Checks for Docker first, then falls back to Podman (increasingly popular on Linux)
+- Both tools are checked for daemon/service status
+
+### Python Detection
+- **macOS/Linux**: Checks `python3` first (to avoid Python 2.x)
+- **Windows**: Checks `python` first (Microsoft Store or standard installer)
+- Falls back to alternative command on each platform
+
+### PowerShell Detection
+- **Windows**: Checks `pwsh` (PowerShell 7+) first, then `powershell` (5.1)
+- **macOS/Linux**: Only checks `pwsh` (PowerShell Core)
+
+### Bash Detection
+- **macOS/Linux**: Standard shell, always checked
+- **Windows**: Checks for Git Bash, WSL, or Cygwin bash (optional but common)
+
 ## Features
 
 Checks for the presence and version of the following tools:

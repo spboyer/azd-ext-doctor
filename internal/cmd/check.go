@@ -270,8 +270,15 @@ func printResult(res checks.CheckResult) {
 // Styling helpers matching azd x builder
 // Format: (SYMBOL) STATUS  MESSAGE  (DETAILS)
 
+func getOutputWriter() *os.File {
+	if os.Getenv("AZD_SERVER") != "" {
+		return os.Stderr
+	}
+	return os.Stdout
+}
+
 func printSuccess(message, details string) {
-	fmt.Printf("%s %s  %-20s  %s\n",
+	fmt.Fprintf(getOutputWriter(), "%s %s  %-20s  %s\n",
 		color.GreenString("(✓)"),
 		color.GreenString("Done   "),
 		message,
@@ -279,7 +286,7 @@ func printSuccess(message, details string) {
 }
 
 func printFailure(message, details string) {
-	fmt.Printf("%s %s  %-20s  %s\n",
+	fmt.Fprintf(getOutputWriter(), "%s %s  %-20s  %s\n",
 		color.RedString("(x)"),
 		color.RedString("Error  "),
 		message,
@@ -287,7 +294,7 @@ func printFailure(message, details string) {
 }
 
 func printRunning(message, details string) {
-	fmt.Printf("%s %s  %-20s  %s\n",
+	fmt.Fprintf(getOutputWriter(), "%s %s  %-20s  %s\n",
 		color.CyanString("(-)"),
 		color.CyanString("Running"),
 		message,
@@ -295,7 +302,7 @@ func printRunning(message, details string) {
 }
 
 func printInfo(message, details string) {
-	fmt.Printf("%s %s  %-20s  %s\n",
+	fmt.Fprintf(getOutputWriter(), "%s %s  %-20s  %s\n",
 		color.WhiteString("(i)"),
 		color.WhiteString("Info   "),
 		message,

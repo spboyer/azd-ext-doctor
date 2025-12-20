@@ -22,28 +22,29 @@ func NewListenCommand() *cobra.Command {
 }
 
 func RunExtensionHost(ctx context.Context) error {
+	// Create a new context that includes the AZD access token
+	ctx = azdext.WithAccessToken(ctx)
+
+	// Create a new AZD client
 	client, err := azdext.NewAzdClient()
 	if err != nil {
 		return fmt.Errorf("failed to create azd client: %w", err)
 	}
 	defer client.Close()
 
-	// Use the extension ID from extension.yaml
-	eventManager := azdext.NewEventManager("spboyer.azd.doctor", client)
-	defer eventManager.Close()
+	// Use the ExtensionHost pattern which handles Ready() signaling automatically
+	host := azdext.NewExtensionHost(client).
+		WithProjectEventHandler("preprovision", onPreProvision).
+		WithProjectEventHandler("predeploy", onPreDeploy).
+		WithProjectEventHandler("preup", onPreUp)
 
-	// Register handlers
-	if err := eventManager.AddProjectEventHandler(ctx, "preprovision", onPreProvision); err != nil {
-		return fmt.Errorf("failed to register preprovision handler: %w", err)
-	}
-	if err := eventManager.AddProjectEventHandler(ctx, "predeploy", onPreDeploy); err != nil {
-		return fmt.Errorf("failed to register predeploy handler: %w", err)
-	}
-	if err := eventManager.AddProjectEventHandler(ctx, "preup", onPreUp); err != nil {
-		return fmt.Errorf("failed to register preup handler: %w", err)
+	// Start listening for events
+	// This is a blocking call and will not return until the server connection is closed
+	if err := host.Run(ctx); err != nil {
+		return fmt.Errorf("failed to run extension: %w", err)
 	}
 
-	return eventManager.Receive(ctx)
+	return nil
 }
 
 func onPreProvision(ctx context.Context, args *azdext.ProjectEventArgs) error {

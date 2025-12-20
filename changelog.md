@@ -1,8 +1,6 @@
 # Release History
 
-## Unreleased
-
-### Cross-Platform Improvements
+## 0.2.0 - Cross-Platform Improvements
 
 - **OS-Aware Tool Detection**: All tool checks now adapt to the operating system
   - Docker/Podman: Checks appropriate container runtime based on OS
@@ -11,6 +9,7 @@
   - Bash: Standard on Unix; optional (Git Bash/WSL) on Windows
 - **Enhanced Test Coverage**: Added comprehensive OS-specific tests for all check functions
 - **Better Error Messages**: Tool names now reflect which command was actually found
+- **Documentation**: Added Known Issues section documenting lifecycle event limitations
 
 ## 0.1.1 - Bug Fix
 

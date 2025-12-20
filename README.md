@@ -21,9 +21,6 @@ Currently, the extension's lifecycle event handlers (prepackage, preprovision, p
 ### Enable Extensions & Install azd-doctor
 
 ```bash
-# Enable extensions
-azd config set alpha.extensions on
-
 # Add azd-doctor extension source
 azd extension source add -n doc -t url -l https://raw.githubusercontent.com/spboyer/azd-ext-doctor/main/registry.json
 

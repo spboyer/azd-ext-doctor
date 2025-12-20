@@ -75,10 +75,10 @@ func onPrePackage(ctx context.Context, args *azdext.ServiceEventArgs) error {
 	debugLog("Service Host: %s", args.Service.Host)
 	debugLog("Service Language: %s", args.Service.Language)
 	debugLog("==================================")
-	
+
 	// Write to stderr so azd shows it
 	fmt.Fprintf(os.Stderr, "\n[azd doctor] Verifying environment for packaging service: %s\n", args.Service.Name)
-	
+
 	err := RunVerify(ctx, "package", 5*time.Second)
 	if err != nil {
 		debugLog("onPrePackage RunVerify returned error: %v", err)
@@ -93,7 +93,7 @@ func onPrePackage(ctx context.Context, args *azdext.ServiceEventArgs) error {
 func onPreProvision(ctx context.Context, args *azdext.ProjectEventArgs) error {
 	debugLog("onPreProvision called for project: %s", args.Project.Name)
 	fmt.Fprintf(os.Stderr, "\n[azd doctor] Verifying environment for provisioning\n")
-	
+
 	// Default timeout for auth check in lifecycle events
 	err := RunVerify(ctx, "provision", 5*time.Second)
 	if err != nil {
@@ -109,7 +109,7 @@ func onPreProvision(ctx context.Context, args *azdext.ProjectEventArgs) error {
 func onPreDeploy(ctx context.Context, args *azdext.ProjectEventArgs) error {
 	debugLog("onPreDeploy called for project: %s", args.Project.Name)
 	fmt.Fprintf(os.Stderr, "\n[azd doctor] Verifying environment for deployment\n")
-	
+
 	err := RunVerify(ctx, "deploy", 5*time.Second)
 	if err != nil {
 		debugLog("onPreDeploy RunVerify returned error: %v", err)
